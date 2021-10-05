@@ -1,0 +1,74 @@
+#!/bin/bash -x
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/sbi/lib_linux
+
+Path='/opt/sbi/binaries/MESSAGE_ROUTER/bin/usr/bin'
+
+ 
+
+N=`ps -ef|grep 'MESSAGE_ROUTER_OTP'|egrep -v 'grep|tail'|wc -l`
+
+TOT_N=4
+
+X=`expr $TOT_N - $N`
+
+if [ $N -lt $TOT_N ];then
+
+        cd $Path
+
+        for (( i=1; i<=$X; i++ ))
+
+        do
+
+        nohup ./MESSAGE_ROUTER -c ../OTP/MESSAGE_ROUTER_OTP.cfg  > ROUTER_OTP-output 2> ROUTER_OTP-error &
+
+        done
+		exit 0
+
+fi
+
+#############################################################################################
+
+Z=`ps -ef|grep 'MESSAGE_ROUTER_TXN'|egrep -v 'grep|tail'|wc -l`
+
+TOT_Z=4
+
+Y=`expr $TOT_Z - $Z`
+
+if [ $Z -lt $TOT_Y ];then
+
+        cd $Path
+
+        for (( i=1; i<=$Y; i++ ))
+
+        do
+
+        nohup ./MESSAGE_ROUTER -c ../TXN/MESSAGE_ROUTER_TXN.cfg  > ROUTER_TXN-output 2> ROUTER_TXN-error &
+
+        done
+		exit 0
+
+fi
+
+#########################################################################################
+
+O=`ps -ef|grep 'MESSAGE_ROUTER_INF'|egrep -v 'grep|tail'|wc -l`
+
+TOT_O=4
+
+T=`expr $TOT_O - $O`
+
+if [ $O -lt $TOT_O ]; then
+
+        cd $Path
+
+        for (( i=1; i<=$T; i++ ))
+
+        do
+
+        nohup ./MESSAGE_ROUTER -c ../INF/MESSAGE_ROUTER_INF.cfg  > ROUTER_INF-output 2> ROUTER_INF-error &
+
+        done
+		exit 0
+
+fi
