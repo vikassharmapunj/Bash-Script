@@ -1,0 +1,26 @@
+# !/bin/bash
+if [ $# -ne 4 ]
+then
+        echo "Req Param -:: 1.ALL.txt  2. number.csv 3. matached.txt 4. unmatched.txt"
+        exit 1
+fi
+File_A=$1;
+File_B=$2;
+File_M=$3;
+File_U=$4;
+
+CNT_FL_B=$(cat $File_B| wc -l)
+
+if [ $CNT_FL_B -eq 0 ];then
+        cat $File_A > $File_M;
+else
+                awk 'BEGIN { FS = OFS = "[,]" } FNR==NR{x[$1]=$1;next}{if (($1!="" && $1 in x)){print $0 }}' $File_B $File_A > $File_M
+                awk 'BEGIN { FS = OFS = "[,]" } FNR==NR{x[$1]=$1;next}{if (!($1!="" && $1 in x)){print $0 }}' $File_B $File_A > $File_U
+fi
+
+CNT_A=$(wc -l $File_A);
+CNT_B=$(wc -l $File_B);
+CNT_M=$(wc -l $File_M);
+CNT_U=$(wc -l $File_U);
+echo "$CNT_A#$CNT_B#$CNT_M#$CNT_U"
+exit 0;
